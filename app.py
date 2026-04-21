@@ -17,6 +17,7 @@ MODEL_ID = "mesabo/agri-plant-disease-resnet50"
 
 print("Loading model...")
 try:
+    # Try loading locally first
     model = ResNetForImageClassification.from_pretrained(MODEL_PATH)
     print("Loaded model from local files.")
 except Exception as e:
@@ -40,9 +41,10 @@ preprocess = T.Compose([
 
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
-    if not os.path.exists("index.html"):
+    index_path = os.path.join(os.path.dirname(__file__), "index.html")
+    if not os.path.exists(index_path):
         return HTMLResponse(content="<h1>index.html not found</h1>", status_code=404)
-    with open("index.html", "r") as f:
+    with open(index_path, "r") as f:
         return f.read()
 
 @app.post("/predict")
@@ -70,17 +72,16 @@ async def predict(file: UploadFile = File(...)):
         # Retrieve label safely
         idx = top_idx.item()
         id2label = model.config.id2label
-        if idx in id2label:
-            label = id2label[idx]
-        elif str(idx) in id2label:
-            label = id2label[str(idx)]
-        else:
-            # Try converting all keys to int for comparison
-            label = "Unknown"
+        
+        # Safe lookup for both int and str keys
+        label = id2label.get(idx) or id2label.get(str(idx))
+        if not label:
+            # Final fallback: numeric search
             for k, v in id2label.items():
                 if int(k) == idx:
                     label = v
                     break
+            if not label: label = "Unknown"
         
         confidence = top_prob.item()
         
@@ -104,8 +105,11 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Mount static files
-if os.path.exists("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+static_path = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_path):
+    app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Get port from environment variable (default to 8000 for local dev)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
