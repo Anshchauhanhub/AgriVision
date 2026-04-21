@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriVision | AI Plant Disease Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🌿</span>
+                <h1>Agri<span>Vision</span></h1>
+            </div>
+            <p class="subtitle">AI-Powered Crop Health Intelligence</p>
+        </header>
+
+        <section class="upload-section glass">
+            <div id="drop-zone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <div class="upload-icon">📤</div>
+                    <h3>Upload Leaf Image</h3>
+                    <p>Drag & drop or click to browse</p>
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+                <div id="preview-container" class="preview-container hidden">
+                    <img id="image-preview" src="#" alt="Preview">
+                    <button id="remove-btn" class="remove-btn">✕</button>
+                </div>
+            </div>
+
+            <button id="analyze-btn" class="analyze-btn" disabled>
+                <span class="btn-text">Analyze Crop Health</span>
+                <div class="loader hidden"></div>
+            </button>
+        </section>
+
+        <section id="result-section" class="result-section glass hidden">
+            <div class="result-header">
+                <div id="status-badge" class="badge">Healthy</div>
+                <h2 id="result-plant">Apple</h2>
+            </div>
+            <div class="result-body">
+                <div class="result-item">
+                    <span class="label">Condition</span>
+                    <span id="result-disease" class="value">Scab Disease</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Confidence</span>
+                    <div class="confidence-bar-container">
+                        <div id="confidence-bar" class="confidence-bar" style="width: 0%;"></div>
+                    </div>
+                    <span id="result-confidence" class="value">0%</span>
+                </div>
+            </div>
+            <div class="result-footer">
+                <button id="reset-btn" class="reset-btn">New Analysis</button>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            <p>&copy; 2026 AgriVision PBL Project. Powered by ResNet50.</p>
+        </footer>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

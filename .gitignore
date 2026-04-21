@@ -1,0 +1,5 @@
+venv/
+__pycache__/
+server_log.txt
+*.pyc
+.DS_Store
