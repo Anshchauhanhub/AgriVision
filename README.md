@@ -64,7 +64,7 @@ The AI can detect diseases across 14 different plant species:
 ## 🧪 Model Details
 
 - **Model Architecture**: ResNet50
-- **Dataset**: Trained on the PlantVillage dataset.
+- **Dataset**: Trained on the [PlantVillage Dataset](https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset) via Kaggle, consisting of 54,305 images across 38 classes.
 - **Format**: Safetensors
 
 ## 👨‍💻 Author
