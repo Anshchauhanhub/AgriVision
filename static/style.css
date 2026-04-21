@@ -2,11 +2,11 @@
     --primary: #2ecc71;
     --primary-dark: #27ae60;
     --secondary: #27ae60;
-    --bg-dark: #0f172a;
-    --text-light: #f8fafc;
+    --bg-dark: #000000;
+    --text-light: #ffffff;
     --text-muted: #94a3b8;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
     --danger: #ef4444;
     --success: #22c55e;
 }
@@ -49,26 +49,26 @@ body {
 }
 
 .blob-1 {
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 600px;
     background: var(--primary);
-    top: -100px;
+    top: -200px;
     right: -100px;
 }
 
 .blob-2 {
-    width: 400px;
-    height: 400px;
-    background: #3b82f6;
-    bottom: -100px;
+    width: 500px;
+    height: 500px;
+    background: #1e293b;
+    bottom: -150px;
     left: -100px;
     animation-delay: -5s;
 }
 
 .blob-3 {
-    width: 300px;
-    height: 300px;
-    background: #8b5cf6;
+    width: 400px;
+    height: 400px;
+    background: #111827;
     top: 40%;
     left: 30%;
     animation-delay: -10s;
