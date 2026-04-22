@@ -299,6 +299,23 @@ header {
     border-left: 3px solid var(--primary);
 }
 
+.explanation-text p {
+    margin-bottom: 0.8rem;
+}
+
+.explanation-text ul, .explanation-text ol {
+    margin-left: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.explanation-text li {
+    margin-bottom: 0.4rem;
+}
+
+.explanation-text strong {
+    color: var(--primary);
+}
+
 .reset-btn {
     width: 100%;
     padding: 0.8rem;

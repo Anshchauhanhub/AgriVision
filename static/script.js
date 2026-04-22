@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update explanation
         const resultExplanation = document.getElementById('result-explanation');
         if (data.explanation) {
-            resultExplanation.innerHTML = data.explanation.replace(/\n/g, '<br>');
+            resultExplanation.innerHTML = data.explanation;
         }
 
         // Animate confidence bar
