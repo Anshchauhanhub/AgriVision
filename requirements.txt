@@ -7,3 +7,5 @@ transformers
 safetensors
 pillow
 gunicorn
+groq
+python-dotenv
