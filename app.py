@@ -13,10 +13,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Groq client
-groq_client = None
-if os.getenv("GROQ_API_KEY"):
-    groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+def get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if api_key:
+        return Groq(api_key=api_key)
+    return None
 
 app = FastAPI(title="AgriVision Plant Disease Detection")
 
@@ -106,11 +107,12 @@ async def predict(file: UploadFile = File(...)):
         status = "Healthy" if "healthy" in disease.lower() else "Diseased"
         
         explanation = ""
-        if status == "Diseased" and groq_client:
+        client = get_groq_client()
+        if status == "Diseased" and client:
             try:
                 prompt = f"Explain the plant disease '{disease_name}' affecting '{plant_name}'. Provide a brief description, causes, and treatment/prevention steps in a concise, helpful way for a farmer."
-                completion = groq_client.chat.completions.create(
-                    model="llama3-8b-8192",
+                completion = client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
                     messages=[
                         {"role": "system", "content": "You are an expert plant pathologist and agricultural advisor. Provide concise, practical advice."},
                         {"role": "user", "content": prompt}
@@ -119,8 +121,8 @@ async def predict(file: UploadFile = File(...)):
                 )
                 explanation = completion.choices[0].message.content
             except Exception as ge:
-                print(f"Groq API error: {ge}")
-                explanation = "Could not fetch detailed explanation at this time."
+                print(f"DEBUG - Groq API error: {ge}")
+                explanation = f"AI Explanation Error: {str(ge)}"
         elif status == "Healthy":
             explanation = f"Your {plant_name} appears to be healthy! Keep up the good work with regular watering and monitoring."
         else:
