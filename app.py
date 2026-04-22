@@ -10,6 +10,7 @@ from transformers import ResNetForImageClassification
 import uvicorn
 from groq import Groq
 from dotenv import load_dotenv
+import markdown
 
 load_dotenv()
 
@@ -114,12 +115,13 @@ async def predict(file: UploadFile = File(...)):
                 completion = client.chat.completions.create(
                     model="llama-3.1-8b-instant",
                     messages=[
-                        {"role": "system", "content": "You are an expert plant pathologist and agricultural advisor. Provide concise, practical advice."},
+                        {"role": "system", "content": "You are an expert plant pathologist. Provide structured advice using bold headers and bullet points. Focus on: 1. Description, 2. Causes, 3. Treatment/Prevention. Keep it concise."},
                         {"role": "user", "content": prompt}
                     ],
                     max_tokens=500,
                 )
-                explanation = completion.choices[0].message.content
+                raw_explanation = completion.choices[0].message.content
+                explanation = markdown.markdown(raw_explanation)
             except Exception as ge:
                 print(f"DEBUG - Groq API error: {ge}")
                 explanation = f"AI Explanation Error: {str(ge)}"
