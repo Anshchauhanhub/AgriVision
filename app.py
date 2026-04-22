@@ -8,6 +8,15 @@ from fastapi.responses import HTMLResponse
 from PIL import Image
 from transformers import ResNetForImageClassification
 import uvicorn
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Initialize Groq client
+groq_client = None
+if os.getenv("GROQ_API_KEY"):
+    groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 app = FastAPI(title="AgriVision Plant Disease Detection")
 
@@ -92,11 +101,37 @@ async def predict(file: UploadFile = File(...)):
             plant = "Crop"
             disease = label
             
+        plant_name = plant.replace("_", " ")
+        disease_name = disease.replace("_", " ")
+        status = "Healthy" if "healthy" in disease.lower() else "Diseased"
+        
+        explanation = ""
+        if status == "Diseased" and groq_client:
+            try:
+                prompt = f"Explain the plant disease '{disease_name}' affecting '{plant_name}'. Provide a brief description, causes, and treatment/prevention steps in a concise, helpful way for a farmer."
+                completion = groq_client.chat.completions.create(
+                    model="llama3-8b-8192",
+                    messages=[
+                        {"role": "system", "content": "You are an expert plant pathologist and agricultural advisor. Provide concise, practical advice."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=500,
+                )
+                explanation = completion.choices[0].message.content
+            except Exception as ge:
+                print(f"Groq API error: {ge}")
+                explanation = "Could not fetch detailed explanation at this time."
+        elif status == "Healthy":
+            explanation = f"Your {plant_name} appears to be healthy! Keep up the good work with regular watering and monitoring."
+        else:
+            explanation = "Please provide a Groq API key in the .env file to see detailed disease explanations."
+
         return {
-            "plant": plant.replace("_", " "),
-            "disease": disease.replace("_", " "),
+            "plant": plant_name,
+            "disease": disease_name,
             "confidence": f"{confidence:.2%}",
-            "status": "Healthy" if "healthy" in disease.lower() else "Diseased"
+            "status": status,
+            "explanation": explanation
         }
         
     except Exception as e:

@@ -282,6 +282,23 @@ header {
     transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
+.explanation-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.explanation-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.2rem;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+    border-left: 3px solid var(--primary);
+}
+
 .reset-btn {
     width: 100%;
     padding: 0.8rem;

@@ -129,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resultPlant.textContent = data.plant;
         resultDisease.textContent = data.disease;
         resultConfidence.textContent = data.confidence;
+        
+        // Update explanation
+        const resultExplanation = document.getElementById('result-explanation');
+        if (data.explanation) {
+            resultExplanation.innerHTML = data.explanation.replace(/\n/g, '<br>');
+        }
 
         // Animate confidence bar
         const confidenceVal = parseFloat(data.confidence);
